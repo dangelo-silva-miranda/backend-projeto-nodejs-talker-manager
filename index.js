@@ -13,6 +13,12 @@ app.get('/', (_request, response) => {
   response.status(StatusCodes.OK).send();
 });
 
+/* importação de arquivo de rotas para /talker */
+const talkerRouter = require('./talkerRouter');
+
+/* Todas as rotas com /talker/<alguma-coisa> entram aqui e vão para o roteador */
+app.use('/talker', talkerRouter);
+
 app.listen(PORT, () => {
   console.log('Online');
 });
