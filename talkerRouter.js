@@ -12,6 +12,22 @@ router.get('/', async (_req, res) => {
 });
 
 // - Listar por ID
+router.get('/:id', async (req, res) => {
+  const id = Number(req.params.id);
+  
+  const talkers = await connection.getAll();
+
+  const talkerById = talkers.filter((talker) => talker.id === id);
+  
+  if (talkerById.length === 0) {
+    return res.status(StatusCodes.NOT_FOUND).json({
+      message: 'Pessoa palestrante não encontrada',
+    });
+  }
+
+  return res.status(StatusCodes.OK).json(talkerById);
+});
+
 // - Login
 // - Criar talker
 // - Editar (ou modificar) talker
