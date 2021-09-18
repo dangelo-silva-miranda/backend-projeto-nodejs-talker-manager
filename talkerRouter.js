@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
     });
   }
 
-  return res.status(StatusCodes.OK).json(talkerById);
+  return res.status(StatusCodes.OK).json(...talkerById);
 });
 
 // - Login
