@@ -16,6 +16,12 @@ app.get('/', (_request, response) => {
 /* importação de arquivo de rotas para /talker */
 const talkerRouter = require('./talkerRouter');
 
+/* importação de arquivo de rotas para /talker */
+const loginRouter = require('./loginRouter');
+
+// - Login
+app.use('/login', loginRouter);
+
 /* Todas as rotas com /talker/<alguma-coisa> entram aqui e vão para o roteador */
 app.use('/talker', talkerRouter);
 
