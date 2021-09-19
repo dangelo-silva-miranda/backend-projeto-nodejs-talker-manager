@@ -32,14 +32,13 @@ const validateEmail = (email) => {
   return message;
 };
 
-const validatePassword = (password) => {
+const validatePassword = (password, minimumCharacterSize = 6) => {
   const message = null;
   
   if (!hasInfo(password)) {
     return { message: 'O campo "password" é obrigatório' };
   }
 
-  const minimumCharacterSize = 6;
   if (password.length < minimumCharacterSize) {
     return { message: 'O "password" deve ter pelo menos 6 caracteres' };
   }
