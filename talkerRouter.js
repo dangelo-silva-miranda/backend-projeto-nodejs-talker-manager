@@ -28,7 +28,6 @@ router.get('/:id', async (req, res) => {
   return res.status(StatusCodes.OK).json(...talkerById);
 });
 
-// - Login
 // - Criar talker
 // - Editar (ou modificar) talker
 // - Apagar (ou deletar) talker
