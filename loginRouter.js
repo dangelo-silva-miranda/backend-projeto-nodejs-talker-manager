@@ -4,48 +4,7 @@ const router = express.Router();
 
 const CryptoJS = require('crypto-js');
 const { StatusCodes } = require('./http-status-codes');
-const { hasInfo, isValidPattern, hasMininumSize } = require('./helpers');
-
-const isValidEmail = (email) => {
-  const emailPattern = /^[a-z0-9.]+@[a-z0-9]+.[a-z]+(.[a-z]+)?$/i;
-  return isValidPattern(email, emailPattern);
-};
-
-/*
-Material consultado sobre validação de e-mail com regex
-https://pt.stackoverflow.com/questions/1386/express%C3%A3o-regular-para-valida%C3%A7%C3%A3o-de-e-mail
-
-Material consultado sobre como testar texto com regex
-https://www.w3schools.com/js/js_regexp.asp
-*/
-const validateEmail = (email) => {
-  const message = null;
-
-  if (!hasInfo(email)) {
-    return { message: 'O campo "email" é obrigatório' }; 
-  }
-  
-  if (!isValidEmail(email)) {
-    return { message: 'O "email" deve ter o formato "email@email.com"' };
-  }
-
-  return message;
-};
-
-const validatePassword = (password) => {
-  const message = null;
-  
-  if (!hasInfo(password)) {
-    return { message: 'O campo "password" é obrigatório' };
-  }
-
-  const minimumCharacterSize = 6;
-  if (!hasMininumSize(password.length, minimumCharacterSize)) {
-    return { message: 'O "password" deve ter pelo menos 6 caracteres' };
-  }
-
-  return message;
-};
+const { validateEmail, validatePassword } = require('./middleware/validations');
 
 /*
   Material consultado sobre WordArray.random e Crypto-js
@@ -61,20 +20,8 @@ const tokenRandomGenerator = (charactersNumber = 16) => {
   return token;
 };
 
-router.post('/', (req, res) => {
-  const { email, password } = req.body;
-  const isNotValidEmail = validateEmail(email);
-  const isNotValidPassword = validatePassword(password);
-  
-  if (isNotValidEmail) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: isNotValidEmail.message });
-  }
-
-  if (isNotValidPassword) {
-    return res.status(StatusCodes.BAD_REQUEST).json({ message: isNotValidPassword.message });
-  }
-  
-  return res.status(StatusCodes.OK).json({ token: tokenRandomGenerator() });
-});
+router.post('/', validateEmail, validatePassword,
+  (_req, res) => res.status(StatusCodes.OK).json({ 
+    token: tokenRandomGenerator() }));
 
 module.exports = router;
