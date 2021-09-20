@@ -8,7 +8,7 @@ https://www.w3schools.com/js/js_regexp.asp
 const isValidPattern = (field, pattern) => pattern.test(field);
 
 const hasInfo = (field) => field && field !== '';
-const hasMininumSize = (field, size) => field >= size;
+const hasMininum = (field, minimum) => field >= minimum;
 
 // const validateField = (field) => {
 //   const message = null;
@@ -32,7 +32,7 @@ const hasMininumSize = (field, size) => field >= size;
 
 module.exports = {
   hasInfo,
-  hasMininumSize,
+  hasMininum,
   isValidPattern,
   // validateField,
 };
