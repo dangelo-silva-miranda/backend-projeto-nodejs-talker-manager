@@ -1,6 +1,10 @@
 const express = require('express');
 const { StatusCodes } = require('./http-status-codes');
 const connection = require('./connection');
+const { 
+  validateToken, validateName, 
+  validateAge, validateTalk, 
+  validateRate, validateWatchedAt } = require('./middleware/validations');
 
 const router = express.Router();
 
@@ -29,6 +33,24 @@ router.get('/:id', async (req, res) => {
 });
 
 // - Criar talker
+router.post('/', 
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateRate,
+  validateWatchedAt,
+  async (req, res) => {
+    const { name, age, talk } = req.body;
+    const talkers = await connection.getAll();
+    
+    const newTalker = { id: talkers.length + 1, name, age, talk };
+    
+    await connection.saveAll([...talkers, newTalker]);
+
+    return res.status(StatusCodes.CREATED).json(newTalker);
+});
+
 // - Editar (ou modificar) talker
 // - Apagar (ou deletar) talker
 // - Listar por termo pesquisado no nome
