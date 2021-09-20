@@ -4,11 +4,11 @@ const router = express.Router();
 
 const CryptoJS = require('crypto-js');
 const { StatusCodes } = require('./http-status-codes');
+const { hasInfo, isValidPattern, hasMininumSize } = require('./helpers');
 
-const hasInfo = (field) => field && field !== '';
 const isValidEmail = (email) => {
   const emailPattern = /^[a-z0-9.]+@[a-z0-9]+.[a-z]+(.[a-z]+)?$/i;
-  return emailPattern.test(email);
+  return isValidPattern(email, emailPattern);
 };
 
 /*
@@ -32,14 +32,15 @@ const validateEmail = (email) => {
   return message;
 };
 
-const validatePassword = (password, minimumCharacterSize = 6) => {
+const validatePassword = (password) => {
   const message = null;
   
   if (!hasInfo(password)) {
     return { message: 'O campo "password" é obrigatório' };
   }
 
-  if (password.length < minimumCharacterSize) {
+  const minimumCharacterSize = 6;
+  if (!hasMininumSize(password.length, minimumCharacterSize)) {
     return { message: 'O "password" deve ter pelo menos 6 caracteres' };
   }
 
