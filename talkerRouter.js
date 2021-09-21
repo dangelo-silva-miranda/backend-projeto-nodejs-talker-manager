@@ -4,7 +4,9 @@ const connection = require('./connection');
 const { 
   validateToken, validateName, 
   validateAge, validateTalk, 
-  validateRate, validateWatchedAt, validateSearchTerm } = require('./middleware/validations');
+  validateRate, validateWatchedAt, 
+  validateSearchTerm } = require('./middleware/validations');
+const { isValidPattern } = require('./helpers');
 
 const router = express.Router();
 
@@ -12,9 +14,9 @@ const router = express.Router();
 router.get('/search', [validateToken, validateSearchTerm], async (req, res) => {
   const searchTerm = req.query.q;
   const talkers = await connection.getAll();
-
+  const pattern = new RegExp(searchTerm, 'i');
   const talkersBySearchTerm = talkers.filter(
-    (talk) => talk.name.match(`/${searchTerm}/`),
+    (talk) => isValidPattern(talk.name, pattern),
   );
 
   return res.status(StatusCodes.OK).json(talkersBySearchTerm);
