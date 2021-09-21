@@ -74,5 +74,17 @@ router.put('/:id',
 });
 
 // - Apagar (ou deletar) talker
+router.delete('/:id', [validateToken], async (req, res) => {
+  const id = Number(req.params.id);
+
+  const talkers = await connection.getAll();
+  const index = talkers.findIndex((item) => item.id === id);
+
+  talkers.splice(index, 1);
+
+  await connection.saveAll(talkers);
+  return res.status(StatusCodes.OK).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
+
 // - Listar por termo pesquisado no nome
 module.exports = router;
