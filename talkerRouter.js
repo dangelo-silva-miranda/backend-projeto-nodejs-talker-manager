@@ -34,12 +34,12 @@ router.get('/:id', async (req, res) => {
 
 // - Criar talker
 router.post('/', 
-  validateToken,
+  [validateToken,
   validateName,
   validateAge,
   validateTalk,
   validateRate,
-  validateWatchedAt,
+  validateWatchedAt],
   async (req, res) => {
     const { name, age, talk } = req.body;
     const talkers = await connection.getAll();
@@ -52,6 +52,27 @@ router.post('/',
 });
 
 // - Editar (ou modificar) talker
+router.put('/:id', 
+  [validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateRate,
+  validateWatchedAt],
+  async (req, res) => {
+    const id = Number(req.params.id);
+    const { name, age, talk } = req.body;
+    const talkers = await connection.getAll();
+    const newTalker = { id, name, age, talk };
+
+    const index = talkers.findIndex((item) => item.id === id);
+    talkers[index] = newTalker;
+    // talkers.splice(index, 1, { id, name, age, talk });
+
+    await connection.saveAll(talkers);
+    return res.status(StatusCodes.CREATED).json(newTalker);
+});
+
 // - Apagar (ou deletar) talker
 // - Listar por termo pesquisado no nome
 module.exports = router;
