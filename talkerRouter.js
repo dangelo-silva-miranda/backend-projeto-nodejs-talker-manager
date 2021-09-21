@@ -84,7 +84,7 @@ router.put('/:id',
     // talkers.splice(index, 1, { id, name, age, talk });
 
     await connection.saveAll(talkers);
-    return res.status(StatusCodes.CREATED).json(newTalker);
+    return res.status(StatusCodes.OK).json(newTalker);
 });
 
 // - Apagar (ou deletar) talker
