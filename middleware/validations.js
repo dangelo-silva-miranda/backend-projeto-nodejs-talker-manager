@@ -1,5 +1,6 @@
 const { hasMininum, hasInfo, isValidPattern } = require('../helpers');
 const { StatusCodes } = require('../http-status-codes');
+const connection = require('../connection');
 
 const validateEmail = (req, res, next) => {
   const { email = '' } = req.body;
@@ -138,6 +139,18 @@ const validateWatchedAt = (req, res, next) => {
   next();
 };
 
+const validateSearchTerm = async (req, res, next) => {
+  const { q = '' } = req.query;
+
+  if (!hasInfo(q)) {
+    const talkers = await connection.getAll();
+  
+    return res.status(StatusCodes.OK).json(talkers);
+  }
+
+  next();
+};
+
 module.exports = {
   validateToken,
   validateEmail,
@@ -147,4 +160,5 @@ module.exports = {
   validateTalk,
   validateRate,
   validateWatchedAt,
+  validateSearchTerm,
 };
