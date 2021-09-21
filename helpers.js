@@ -5,7 +5,7 @@ https://pt.stackoverflow.com/questions/1386/express%C3%A3o-regular-para-valida%C
 Material consultado sobre como testar texto com regex
 https://www.w3schools.com/js/js_regexp.asp
 */
-const isValidPattern = (field, pattern) => pattern.test(field);
+const isValidPattern = (field, pattern) => pattern.test(field); // field.match(pattern);
 
 const hasInfo = (field) => field && field !== '';
 const hasMininum = (field, minimum) => field >= minimum;
